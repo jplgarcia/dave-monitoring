@@ -16,6 +16,31 @@ function bigintReplacer(_, value) {
 const DATA_FILE = './data.json'
 const BATCH_BLOCK = 999n
 
+async function notifyDiscord(message) {
+    const webhookUrl = process.env.DISCORD_WEBHOOK;
+    if (!webhookUrl) {
+        console.warn('No DISCORD_WEBHOOK set in environment variables.');
+        return;
+    }
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: message }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Discord webhook error: ${errorText}`);
+        }
+
+        console.log('Notification sent to Discord.');
+    } catch (err) {
+        console.error('Failed to send Discord notification:', err);
+    }
+}
+
 async function checkForEvent() {
     try {
         const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
@@ -47,7 +72,9 @@ async function checkForEvent() {
             for (const tournament of toVerify) {
                 const nClaims = Object.getOwnPropertyNames(tournament.claims).length
                 if (nClaims > 1) {
-                    console.log(`Dispute running on ${tournament.address}`)
+                    const msg = `⚠️ Dispute detected on tournament \`${tournament.address}\` with ${nClaims} claims.`
+                    console.log(msg)
+                    await notifyDiscord(msg)
                 }
             }
         } else {
