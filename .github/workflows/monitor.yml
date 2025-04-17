@@ -25,5 +25,8 @@ jobs:
     - name: Run event monitoring script
       run: |
         node monitor.js
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
         git add -A
-        git commit -m "chore: job from schedule"
+        git diff --cached --quiet || git commit -m "chore: job from schedule"
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
