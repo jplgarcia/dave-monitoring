@@ -14,7 +14,7 @@ function bigintReplacer(_, value) {
 
 
 const DATA_FILE = './data.json'
-const BATCH_BLOCK = 999n
+const BATCH_BLOCK = 1000n
 
 async function notifyDiscord(message) {
     const webhookUrl = process.env.DISCORD_WEBHOOK;
@@ -46,9 +46,12 @@ async function checkForEvent() {
         const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
         const data = JSON.parse(raw);
         const lastProcessedBlock = BigInt(data.lastProcessedBlock)
-        let toBlock = await client.getBlockNumber()
+        const currentBLock = await client.getBlockNumber()
+        console.log(`lastProcessedBlock = ${lastProcessedBlock}; currentBLock = ${currentBLock}`)
+        let toBlock = currentBLock
         if (toBlock > lastProcessedBlock + BATCH_BLOCK) {
             toBlock = lastProcessedBlock + BATCH_BLOCK
+            console.log(`Avoid block limit: toBlock = ${toBlock}; currentBLock = ${currentBLock}`)
         }
         const logs = await client.getLogs({
             event: parseAbiItem('event commitmentJoined(bytes32 root)'),
@@ -66,7 +69,10 @@ async function checkForEvent() {
                     address: log.address,
                 }
                 toVerify.push(tournament)
-                tournament.claims[log.args.root] = log.transactionHash
+                tournament.claims[log.args.root] = {
+                    tx: log.transactionHash,
+                    blockNumber: log.blockNumber.toString(),
+                }
                 data.tournaments[log.address] = tournament
             }
             for (const tournament of toVerify) {
