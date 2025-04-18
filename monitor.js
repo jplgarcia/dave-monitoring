@@ -38,6 +38,7 @@ async function notifyDiscord(message) {
         console.log('Notification sent to Discord.');
     } catch (err) {
         console.error('Failed to send Discord notification:', err);
+        process.exit(1)
     }
 }
 
@@ -76,9 +77,14 @@ async function checkForEvent() {
                 data.tournaments[log.address] = tournament
             }
             for (const tournament of toVerify) {
-                const nClaims = Object.getOwnPropertyNames(tournament.claims).length
-                if (nClaims > 1) {
-                    const msg = `⚠️ Dispute detected on tournament \`${tournament.address}\` with ${nClaims} claims.`
+                const claims = Object.getOwnPropertyNames(tournament.claims)
+                if (claims.length > 1) {
+                    let msg = `⚠️ Dispute detected on tournament \`${tournament.address}\` with ${claims.length} claims:\n`
+                    for (const claim of claims) {
+                        msg += `\n**Claim: ${claim}**\n`
+                        msg += `- tx: ${tournament.claims[claim].tx}\n`
+                        msg += `- blockNumber: ${tournament.claims[claim].blockNumber}\n`
+                    }
                     console.log(msg)
                     await notifyDiscord(msg)
                 }
