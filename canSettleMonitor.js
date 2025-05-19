@@ -3,7 +3,8 @@ import { createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
 import { notifyDiscord } from './discord.js'
 
-const DATA_FILE = './canSettle.json';
+const DATA_FILE = './data.json';
+const CAN_SETTLE_DATA_FILE = './canSettle.json';
 const DAVE_CONTRACT_ADDRESS = process.env.DAVE_CONTRACT_ADDRESS || '0x545E9Ad57e2108394857FbdB928F3B30f08843df';
 
 const abi = [
@@ -81,38 +82,57 @@ async function getCurrentSealedEpoch() {
 }
 
 async function checkCanSettle() {
-    let data = {
+    let canSettleData = {
         isFinished: false,
         epochNumber: '0',
         winnerCommitment: '0x',
         lastCanSettleTimestamp: null,
+    };
+
+    let data = {};
+
+    try {
+        const raw = await fs.promises.readFile(CAN_SETTLE_DATA_FILE, 'utf-8');
+        canSettleData = JSON.parse(raw);
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
     }
 
     try {
         const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
         data = JSON.parse(raw);
     } catch (e) {
-        console.error(e)
-        process.exit(1)
+        console.error(e);
+        process.exit(1);
     }
 
     const res = await canSettle();
 
-    if (!data.isFinished && res.isFinished) {
+    if (!canSettleData.isFinished && res.isFinished) {
         res.lastCanSettleTimestamp = Date.now();
     } else {
-        res.lastCanSettleTimestamp = data.lastCanSettleTimestamp || null;
+        res.lastCanSettleTimestamp = canSettleData.lastCanSettleTimestamp || null;
     }
 
     const currentSealedEpoch = await getCurrentSealedEpoch()
 
-    if (currentSealedEpoch.epochNumber !== data.currentSealedEpoch?.epochNumber) {
+    if (currentSealedEpoch.epochNumber !== canSettleData.currentSealedEpoch?.epochNumber) {
         res.currentSealedEpoch = { ...currentSealedEpoch, createdAt: Date.now() }
     } else {
-        res.currentSealedEpoch = data.currentSealedEpoch
+        res.currentSealedEpoch = canSettleData.currentSealedEpoch
     }
 
     console.log(res)
+
+    const tournamentAddress = (res.currentSealedEpoch?.tournament || '').toLowerCase()
+    if (tournamentAddress && !data.tournaments[tournamentAddress]) {
+        const elapsed = Date.now() - (res.currentSealedEpoch?.createdAt || 0);
+        if (elapsed > 3600000) {
+            const msg = `⚠️ No claims for epoch ${res.epochNumber} in over an hour.`;
+            await notifyDiscord(msg);
+        }
+    }
 
     if (res.isFinished && res.lastCanSettleTimestamp) {
         const elapsed = Date.now() - res.lastCanSettleTimestamp;
@@ -122,7 +142,7 @@ async function checkCanSettle() {
         }
     }
 
-    await fs.promises.writeFile(DATA_FILE, JSON.stringify(res, null, 4));
+    await fs.promises.writeFile(CAN_SETTLE_DATA_FILE, JSON.stringify(res, null, 4));
 }
 
 checkCanSettle();
