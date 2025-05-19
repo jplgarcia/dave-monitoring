@@ -28,7 +28,16 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
       run: |
         node monitor.js
+
+    - name: Run canSettle monitoring script
+      env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          RPC_URL: ${{ secrets.RPC_URL }}
+      run: |
         node canSettleMonitor.js
+    
+    - name: Commit and push data
+      run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
         git add -A

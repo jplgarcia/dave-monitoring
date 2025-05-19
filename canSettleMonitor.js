@@ -5,6 +5,7 @@ import { notifyDiscord } from './discord.js'
 
 const DATA_FILE = './canSettle.json';
 const DAVE_CONTRACT_ADDRESS = process.env.DAVE_CONTRACT_ADDRESS || '0x545E9Ad57e2108394857FbdB928F3B30f08843df';
+
 const abi = [
     {
         name: 'canSettle',
@@ -60,6 +61,8 @@ async function checkCanSettle() {
     } else {
         res.lastCanSettleTimestamp = data.lastCanSettleTimestamp || null;
     }
+
+    console.log(res)
 
     if (res.isFinished && res.lastCanSettleTimestamp) {
         const elapsed = Date.now() - res.lastCanSettleTimestamp;
