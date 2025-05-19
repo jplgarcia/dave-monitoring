@@ -110,7 +110,7 @@ async function checkForEvent() {
         const currentTimestamp = BigInt(Math.floor(Date.now() / 1000));
         console.log(`currentTimestamp=${currentTimestamp} vs ${lastTimestamp} = ${currentTimestamp - lastTimestamp}`)
         const isClaimTimedOut = currentTimestamp - lastTimestamp > maxTimeWithoutClaims;
-        if (isClaimTimedOut) {
+        if (isClaimTimedOut && process.env.ENABLE_CLAIM_TIMEOUT_MONITORING) {
             const lastDate = new Date(Number(lastTimestamp) * 1000);
             const formattedDate = lastDate.toISOString();
             const msg = `⚠️ The last claim was submitted at \`${formattedDate}\`, which is more than ${maxTimeWithoutClaims} seconds ago.`;
