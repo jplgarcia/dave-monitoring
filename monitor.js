@@ -14,7 +14,7 @@ function bigintReplacer(_, value) {
 
 
 const DATA_FILE = './data.json'
-const BATCH_BLOCK = 1000n
+const BATCH_BLOCK = process.env.BATCH_BLOCK || 500n
 
 async function notifyDiscord(message) {
     const webhookUrl = process.env.DISCORD_WEBHOOK;
