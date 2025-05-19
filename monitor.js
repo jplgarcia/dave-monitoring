@@ -2,6 +2,10 @@ import fs from 'fs'
 import { parseAbiItem, formatEther } from 'viem'
 import { createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
+import { notifyDiscord } from './discord.js'
+
+const DATA_FILE = './data.json';
+const BATCH_BLOCK = BigInt(process.env.BATCH_BLOCK || 500);
 
 const client = createPublicClient({
     chain: sepolia,
@@ -10,36 +14,6 @@ const client = createPublicClient({
 
 function bigintReplacer(_, value) {
     return typeof value === 'bigint' ? value.toString() : value;
-}
-
-
-const DATA_FILE = './data.json'
-const BATCH_BLOCK = process.env.BATCH_BLOCK || 500n
-
-async function notifyDiscord(message) {
-    const webhookUrl = process.env.DISCORD_WEBHOOK;
-    if (!webhookUrl) {
-        console.warn('No DISCORD_WEBHOOK set in environment variables.');
-        return;
-    }
-
-    try {
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content: message }),
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Discord webhook error: ${errorText}`);
-        }
-
-        console.log('Notification sent to Discord.');
-    } catch (err) {
-        console.error('Failed to send Discord notification:', err);
-        process.exit(1)
-    }
 }
 
 async function checkForEvent() {
@@ -106,16 +80,6 @@ async function checkForEvent() {
         } else {
             console.log('No new events found.')
         }
-        const maxTimeWithoutClaims = BigInt(process.env.MAX_TIME_WITHOUT_CLAIMS || 3600);
-        const currentTimestamp = BigInt(Math.floor(Date.now() / 1000));
-        console.log(`currentTimestamp=${currentTimestamp} vs ${lastTimestamp} = ${currentTimestamp - lastTimestamp}`)
-        const isClaimTimedOut = currentTimestamp - lastTimestamp > maxTimeWithoutClaims;
-        if (isClaimTimedOut && process.env.ENABLE_CLAIM_TIMEOUT_MONITORING) {
-            const lastDate = new Date(Number(lastTimestamp) * 1000);
-            const formattedDate = lastDate.toISOString();
-            const msg = `⚠️ The last claim was submitted at \`${formattedDate}\`, which is more than ${maxTimeWithoutClaims} seconds ago.`;
-            await notifyDiscord(msg);
-        }
         data.lastTimestamp = lastTimestamp.toString()
         data.lastProcessedBlock = toBlock.toString()
         await fs.promises.writeFile(DATA_FILE, JSON.stringify(data, null, 4))
@@ -143,4 +107,3 @@ async function checkBalance() {
 }
 
 checkBalance()
-
