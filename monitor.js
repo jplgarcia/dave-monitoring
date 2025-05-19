@@ -64,7 +64,18 @@ async function checkForEvent() {
             console.log(`Found ${logs.length} occurrences of 'commitmentJoined' event!`)
             console.log(JSON.stringify(logs, bigintReplacer, 4))
             const toVerify = []
+            const blockCache = new Map()
+            const lastTimestamp = BigInt(data.lastTimestamp || 0)
             for (const log of logs) {
+                let block = blockCache.get(log.blockNumber)
+                if (!block) {
+                    block = await client.getBlock(log.blockNumber)
+                    blockCache.set(log.blockNumber, block)
+                }
+                const blockTimestamp = BigInt(block.timestamp);
+                if (blockTimestamp > lastTimestamp) {
+                    lastTimestamp = blockTimestamp;
+                }
                 const tournament = data.tournaments[log.address] || {
                     claims: {},
                     address: log.address,
@@ -73,9 +84,21 @@ async function checkForEvent() {
                 tournament.claims[log.args.root] = {
                     tx: log.transactionHash,
                     blockNumber: log.blockNumber.toString(),
+                    timestamp: blockTimestamp.toString(),
                 }
                 data.tournaments[log.address] = tournament
             }
+            const maxTimeWithoutClaims = BigInt(process.env.MAX_TIME_WITHOUT_CLAIMS || 3600);
+            const currentTimestamp = BigInt(Math.floor(Date.now() / 1000)); // current time in seconds as BigInt
+
+            const isClaimTimedOut = currentTimestamp - lastTimestamp > maxTimeWithoutClaims;
+            if (isClaimTimedOut) {
+                const lastDate = new Date(Number(lastTimestamp) * 1000);
+                const formattedDate = lastDate.toISOString();
+                const msg = `⚠️ The last claim was submitted at \`${formattedDate}\`, which is more than ${maxTimeWithoutClaims} seconds ago.`;
+                await notifyDiscord(msg);
+            }
+
             for (const tournament of toVerify) {
                 const claims = Object.getOwnPropertyNames(tournament.claims)
                 if (claims.length > 1) {
@@ -110,7 +133,7 @@ async function checkBalance() {
     const balance = await client.getBalance({ address: NODE_ADDRESS })
     console.log(`Balance of ${NODE_ADDRESS}: ${balance} wei`)
     console.log(`Equivalent in ETH: ${formatEther(balance)} ETH (alarm threshold: ${formatEther(MIN_BALANCE)} ETH)`)
-    
+
     if (balance <= MIN_BALANCE) {
         const msg = `⚠️ Balance of ${NODE_ADDRESS} is critically low: ${formatEther(balance)} ETH.`
         notifyDiscord(msg)
