@@ -60,12 +60,13 @@ async function checkForEvent() {
             toBlock,
         })
 
+        let lastTimestamp = BigInt(data.lastTimestamp || 0)
+
         if (logs.length > 0) {
             console.log(`Found ${logs.length} occurrences of 'commitmentJoined' event!`)
             console.log(JSON.stringify(logs, bigintReplacer, 4))
             const toVerify = []
             const blockCache = new Map()
-            const lastTimestamp = BigInt(data.lastTimestamp || 0)
             for (const log of logs) {
                 let block = blockCache.get(log.blockNumber)
                 if (!block) {
@@ -88,16 +89,6 @@ async function checkForEvent() {
                 }
                 data.tournaments[log.address] = tournament
             }
-            const maxTimeWithoutClaims = BigInt(process.env.MAX_TIME_WITHOUT_CLAIMS || 3600);
-            const currentTimestamp = BigInt(Math.floor(Date.now() / 1000)); // current time in seconds as BigInt
-
-            const isClaimTimedOut = currentTimestamp - lastTimestamp > maxTimeWithoutClaims;
-            if (isClaimTimedOut) {
-                const lastDate = new Date(Number(lastTimestamp) * 1000);
-                const formattedDate = lastDate.toISOString();
-                const msg = `⚠️ The last claim was submitted at \`${formattedDate}\`, which is more than ${maxTimeWithoutClaims} seconds ago.`;
-                await notifyDiscord(msg);
-            }
 
             for (const tournament of toVerify) {
                 const claims = Object.getOwnPropertyNames(tournament.claims)
@@ -115,6 +106,17 @@ async function checkForEvent() {
         } else {
             console.log('No new events found.')
         }
+        const maxTimeWithoutClaims = BigInt(process.env.MAX_TIME_WITHOUT_CLAIMS || 3600);
+        const currentTimestamp = BigInt(Math.floor(Date.now() / 1000));
+        console.log(`currentTimestamp=${currentTimestamp} vs ${lastTimestamp} = ${currentTimestamp - lastTimestamp}`)
+        const isClaimTimedOut = currentTimestamp - lastTimestamp > maxTimeWithoutClaims;
+        if (isClaimTimedOut) {
+            const lastDate = new Date(Number(lastTimestamp) * 1000);
+            const formattedDate = lastDate.toISOString();
+            const msg = `⚠️ The last claim was submitted at \`${formattedDate}\`, which is more than ${maxTimeWithoutClaims} seconds ago.`;
+            await notifyDiscord(msg);
+        }
+        data.lastTimestamp = lastTimestamp.toString()
         data.lastProcessedBlock = toBlock.toString()
         await fs.promises.writeFile(DATA_FILE, JSON.stringify(data, null, 4))
     } catch (error) {
