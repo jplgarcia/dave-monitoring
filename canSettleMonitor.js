@@ -74,8 +74,8 @@ async function getCurrentSealedEpoch() {
     })
     return {
         epochNumber: (result[0] || -1).toString(),
-        inputIndexLowerBound: (result[1] || -1).toString(),
-        inputIndexUpperBound: (result[2] || -1).toString(),
+        inputIndexLowerBound: (result[1] ?? -1).toString(),
+        inputIndexUpperBound: (result[2] ?? -1).toString(),
         tournament: result[3],
     }
 }
