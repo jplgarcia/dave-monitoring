@@ -106,7 +106,7 @@ async function checkCanSettle() {
 
     const currentSealedEpoch = await getCurrentSealedEpoch()
 
-    if (currentSealedEpoch.epochNumber !== res.currentSealedEpoch?.epochNumber) {
+    if (currentSealedEpoch.epochNumber !== data.currentSealedEpoch?.epochNumber) {
         res.currentSealedEpoch = { ...currentSealedEpoch, createdAt: Date.now() }
     } else {
         res.currentSealedEpoch = data.currentSealedEpoch
