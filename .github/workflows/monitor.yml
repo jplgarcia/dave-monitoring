@@ -28,8 +28,9 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
       run: |
         node monitor.js
+        node canSettleMonitor.js
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-        git add ./data.json
+        git add -A
         git diff --cached --quiet || git commit -m "chore: job from schedule"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main

@@ -30,7 +30,6 @@ async function canSettle() {
         abi: abi,
         functionName: 'canSettle',
     })
-    console.log(result)
     return {
         isFinished: result[0],
         epochNumber: (result[1] || 0).toString(),
@@ -39,15 +38,38 @@ async function canSettle() {
 }
 
 async function checkCanSettle() {
-    const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
-    const data = JSON.parse(raw);
-    const res = await canSettle();
-    console.log(res)
-    if (data.isFinished && res.isFinished) {
-        const msg = `⚠️ The current epoch is ${res.epochNumber} and it is still open for settlement.`
-        await notifyDiscord(msg)
+    let data = {
+        isFinished: false,
+        epochNumber: '0',
+        winnerCommitment: '0x',
+        lastCanSettleTimestamp: null,
     }
-    await fs.promises.writeFile(DATA_FILE, JSON.stringify(res, null, 4))
+
+    try {
+        const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
+        data = JSON.parse(raw);
+    } catch (e) {
+        console.error(e)
+        process.exit(1)
+    }
+
+    const res = await canSettle();
+
+    if (!data.isFinished && res.isFinished) {
+        res.lastCanSettleTimestamp = Date.now();
+    } else {
+        res.lastCanSettleTimestamp = data.lastCanSettleTimestamp || null;
+    }
+
+    if (res.isFinished && res.lastCanSettleTimestamp) {
+        const elapsed = Date.now() - res.lastCanSettleTimestamp;
+        if (elapsed > 3600000) {
+            const msg = `⚠️ Epoch ${res.epochNumber} has been open for settlement for over 1 hour.`;
+            await notifyDiscord(msg);
+        }
+    }
+
+    await fs.promises.writeFile(DATA_FILE, JSON.stringify(res, null, 4));
 }
 
 checkCanSettle();
