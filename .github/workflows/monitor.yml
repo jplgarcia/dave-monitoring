@@ -26,6 +26,7 @@ jobs:
       env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           RPC_URL: ${{ secrets.RPC_URL }}
+          BATCH_BLOCK: 490
       run: |
         node monitor.js
 
