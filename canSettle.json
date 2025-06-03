@@ -1,8 +1,8 @@
 {
-    "isFinished": false,
+    "isFinished": true,
     "epochNumber": "38",
-    "winnerCommitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "lastCanSettleTimestamp": 1748691233706,
+    "winnerCommitment": "0xf959e42ca00d7db05b330bd1aa21ee0e667811ecf0cbebd18ca3184910ac1d47",
+    "lastCanSettleTimestamp": 1748983950591,
     "currentSealedEpoch": {
         "epochNumber": "38",
         "inputIndexLowerBound": "0",
