@@ -1,4 +1,4 @@
-import fs from 'fs'
+import { readFile, writeFile } from 'node:fs/promises'
 import { createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
 import { notifyDiscord } from './discord.js'
@@ -92,7 +92,7 @@ async function checkCanSettle() {
     let data = {};
 
     try {
-        const raw = await fs.promises.readFile(CAN_SETTLE_DATA_FILE, 'utf-8');
+        const raw = await readFile(CAN_SETTLE_DATA_FILE, 'utf-8');
         canSettleData = JSON.parse(raw);
     } catch (e) {
         console.error(e);
@@ -100,7 +100,7 @@ async function checkCanSettle() {
     }
 
     try {
-        const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
+        const raw = await readFile(DATA_FILE, 'utf-8');
         data = JSON.parse(raw);
     } catch (e) {
         console.error(e);
@@ -142,7 +142,7 @@ async function checkCanSettle() {
         }
     }
 
-    await fs.promises.writeFile(CAN_SETTLE_DATA_FILE, JSON.stringify(res, null, 4));
+    await writeFile(CAN_SETTLE_DATA_FILE, JSON.stringify(res, null, 4));
 }
 
 checkCanSettle();

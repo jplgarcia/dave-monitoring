@@ -1,6 +1,5 @@
-import fs from 'fs'
-import { parseAbiItem, formatEther } from 'viem'
-import { createPublicClient, http } from 'viem'
+import { readFile, writeFile } from 'node:fs/promises'
+import { parseAbiItem, formatEther, createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
 import { notifyDiscord } from './discord.js'
 
@@ -18,7 +17,7 @@ function bigintReplacer(_, value) {
 
 async function checkForEvent() {
     try {
-        const raw = await fs.promises.readFile(DATA_FILE, 'utf-8');
+        const raw = await readFile(DATA_FILE, 'utf-8');
         const data = JSON.parse(raw);
         const lastProcessedBlock = BigInt(data.lastProcessedBlock)
         const currentBLock = await client.getBlockNumber()
@@ -82,7 +81,7 @@ async function checkForEvent() {
         }
         data.lastTimestamp = lastTimestamp.toString()
         data.lastProcessedBlock = toBlock.toString()
-        await fs.promises.writeFile(DATA_FILE, JSON.stringify(data, null, 4))
+        await writeFile(DATA_FILE, JSON.stringify(data, null, 4))
     } catch (error) {
         console.error('Error querying blockchain:', error)
         process.exit(1)
