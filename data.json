@@ -1,5 +1,5 @@
 {
-    "lastProcessedBlock": "8478290",
+    "lastProcessedBlock": "8478383",
     "tournaments": {
         "0xb1b2bfbe86c8c2971ac6063bd36cc533edabd7e0": {
             "claims": {
@@ -470,7 +470,37 @@
                 }
             },
             "address": "0xb536c2e81a8ed036fae8977d93e1ad0e0d24f074"
+        },
+        "0xa36d6aeaf2667eec7cedb6831431868f01ceb47e": {
+            "claims": {
+                "0x3e5323656c91ccd90db588f1900b05601094efe961608d82c5727b45823ba2ca": {
+                    "tx": "0x63ef1036a954a829c2de22f0fea275b8e2213dc61bf5cde7527a8afd4b6caa86",
+                    "blockNumber": "8478323",
+                    "timestamp": "1749079800"
+                },
+                "0x70950dbe80824fd327e294844bae5f2d0321484292bca6578c5fd7499fc053c1": {
+                    "tx": "0x42dc247b78bb87401b1263fb7cda902c9c88619e75e29e65e773a05172b8684e",
+                    "blockNumber": "8478325",
+                    "timestamp": "1749079800"
+                }
+            },
+            "address": "0xa36d6aeaf2667eec7cedb6831431868f01ceb47e"
+        },
+        "0x93d88f75e6ef8a4280ed99a43d156d1e26420db6": {
+            "claims": {
+                "0xe219c9957a05183797806dba56acd90a8d1131ce8e4847ee272af86d32103fc8": {
+                    "tx": "0xbc50c836660e8b9bc5fc2de53da10c00126661e97d9fd3e05684449dca3c17bd",
+                    "blockNumber": "8478379",
+                    "timestamp": "1749079800"
+                },
+                "0x1282780ca240d767d594659a8091ddc6ea744d5c5e285dc4768f721b4bf009eb": {
+                    "tx": "0xf4eca996067c04cd2f5c0393844417bc377c827fe74e4ed78351a0d2b902c4a3",
+                    "blockNumber": "8478381",
+                    "timestamp": "1749079800"
+                }
+            },
+            "address": "0x93d88f75e6ef8a4280ed99a43d156d1e26420db6"
         }
     },
-    "lastTimestamp": "1749042276"
+    "lastTimestamp": "1749079800"
 }
