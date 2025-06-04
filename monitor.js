@@ -95,14 +95,18 @@ const NODE_ADDRESS = process.env.NODE_ADDRESS ?? '0x79Ec6ba3352216E496FCfEd1d2e8
 const MIN_BALANCE = BigInt(process.env.MIN_BALANCE ?? '100000000000000000') // 0.1 ETH
 
 async function checkBalance() {
-    const balance = await client.getBalance({ address: NODE_ADDRESS })
-    console.log(`Balance of ${NODE_ADDRESS}: ${balance} wei`)
-    console.log(`Equivalent in ETH: ${formatEther(balance)} ETH (alarm threshold: ${formatEther(MIN_BALANCE)} ETH)`)
+    try {
+        const balance = await client.getBalance({ address: NODE_ADDRESS })
+        console.log(`Balance of ${NODE_ADDRESS}: ${balance} wei`)
+        console.log(`Equivalent in ETH: ${formatEther(balance)} ETH (alarm threshold: ${formatEther(MIN_BALANCE)} ETH)`)
 
-    if (balance <= MIN_BALANCE) {
-        const msg = `⚠️ Balance of ${NODE_ADDRESS} is critically low: ${formatEther(balance)} ETH.`
-        notifyDiscord(msg)
+        if (balance <= MIN_BALANCE) {
+            const msg = `⚠️ Balance of ${NODE_ADDRESS} is critically low: ${formatEther(balance)} ETH.`
+            notifyDiscord(msg)
+        }
+    } catch (error) {
+        console.error('Error checking balance:', error)
     }
 }
 
-checkBalance()
+checkBalance();
