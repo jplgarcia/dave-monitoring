@@ -34,9 +34,10 @@ jobs:
       env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           RPC_URL: ${{ secrets.RPC_URL }}
+          DAVE_CONTRACT_ADDRESS: "0xa3207ab41E862a41c6a8aD9894daA9222977dF1d"
       run: |
         node canSettleMonitor.js
-    
+
     - name: Commit and push data
       run: |
         git config --global user.email "action@github.com"
