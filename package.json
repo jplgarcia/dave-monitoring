@@ -1,16 +1,20 @@
 {
   "name": "dave-monitoring",
   "version": "1.0.0",
+  "private": true,
   "description": "",
-  "main": "index.js",
+  "main": "monitor.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.15.29"
+  },
   "dependencies": {
-    "viem": "^2.27.0"
+    "viem": "^2.30.6"
   }
 }
