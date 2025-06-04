@@ -4,7 +4,7 @@ import { sepolia } from 'viem/chains'
 import { notifyDiscord } from './discord.js'
 
 const DATA_FILE = './data.json';
-const BATCH_BLOCK = BigInt(process.env.BATCH_BLOCK || 500);
+const BATCH_BLOCK = BigInt(process.env.BATCH_BLOCK ?? 500);
 
 const client = createPublicClient({
     chain: sepolia,
@@ -91,8 +91,8 @@ async function checkForEvent() {
 checkForEvent()
 
 // check balance
-const NODE_ADDRESS = process.env.NODE_ADDRESS || '0x79Ec6ba3352216E496FCfEd1d2e86Ee15eed3861'
-const MIN_BALANCE = BigInt(process.env.MIN_BALANCE || '100000000000000000') // 0.1 ETH
+const NODE_ADDRESS = process.env.NODE_ADDRESS ?? '0x79Ec6ba3352216E496FCfEd1d2e86Ee15eed3861'
+const MIN_BALANCE = BigInt(process.env.MIN_BALANCE ?? '100000000000000000') // 0.1 ETH
 
 async function checkBalance() {
     const balance = await client.getBalance({ address: NODE_ADDRESS })
