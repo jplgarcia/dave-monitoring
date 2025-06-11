@@ -44,6 +44,6 @@ jobs:
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-        git add -A
-        git diff --cached --quiet || git commit -m "chore: job from schedule"
+        git add data
+        git diff --cached --quiet || git commit -m "Run monitor job"
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
