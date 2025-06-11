@@ -41,6 +41,7 @@ jobs:
         pnpm run can-settle-monitor
 
     - name: Commit and push data
+      if: {{ github.ref == 'ref/head/main' }}
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
