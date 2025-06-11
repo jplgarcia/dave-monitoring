@@ -21,7 +21,6 @@ jobs:
         cache: 'pnpm'
 
     - name: Install Node packages
-      shell: bash
       run: pnpm install
 
     - name: Run event monitoring script

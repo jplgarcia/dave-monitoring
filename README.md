@@ -38,7 +38,7 @@ Monitoring is automated using a GitHub Actions workflow defined in `.github/work
 - **Steps:**
   1. Checks out the repository.
   2. Sets up Node.js (version 22).
-  3. Installs dependencies with `npm ci`.
+  3. Installs dependencies with `pnpm install`.
   4. Runs `monitor.js` and `canSettleMonitor.js` with required environment variables.
   5. Commits and pushes any updated data files back to the repository.
 
@@ -56,7 +56,7 @@ Set the following secrets in your GitHub repository:
 
 1. Install dependencies:
    ```bash
-   npm ci
+   pnpm install
    ```
 2. Set the required environment variables:
    - `DISCORD_WEBHOOK`
@@ -64,10 +64,11 @@ Set the following secrets in your GitHub repository:
    - (Optional) `DAVE_CONTRACT_ADDRESS`, `BATCH_BLOCK`, `NODE_ADDRESS`, `MIN_BALANCE`
 3. Run the scripts:
    ```bash
-   node src/monitor.js
-   node src/canSettleMonitor.js
+   pnpm run monitor
+   pnpm run can-settle-monitor
    ```
 
 ## Dependencies
 
 - [Node.js](https://nodejs.org/) (v22)
+- [corepack](https://github.com/nodejs/corepack)
