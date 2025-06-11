@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       viem:
-        specifier: ^2.30.6
+        specifier: ^2.31.0
         version: 2.31.0
     devDependencies:
       '@types/node':
-        specifier: ^22.15.29
+        specifier: ^22.15.31
         version: 22.15.31
 
 packages:

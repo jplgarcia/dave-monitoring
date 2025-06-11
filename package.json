@@ -14,9 +14,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.15.29"
+    "@types/node": "^22.15.31"
   },
   "dependencies": {
-    "viem": "^2.30.6"
-  }
+    "viem": "^2.31.0"
+  },
+  "packageManager": "pnpm@10.11.0"
 }
