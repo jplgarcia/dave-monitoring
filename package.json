@@ -6,6 +6,8 @@
   "main": "monitor.js",
   "type": "module",
   "scripts": {
+    "monitor": "node src/monitor.js",
+    "can-settle-monitor": "node src/canSettleMonitor.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

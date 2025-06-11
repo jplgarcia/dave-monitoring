@@ -13,14 +13,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
+    - uses: pnpm/action-setup@v3
 
-    - name: Install dependencies
-      run: |
-        npm ci
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: 'pnpm'
+
+    - name: Install Node packages
+      shell: bash
+      run: pnpm install
 
     - name: Run event monitoring script
       env:
@@ -28,7 +30,7 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
           BATCH_BLOCK: 490
       run: |
-        node src/monitor.js
+        pnpm run monitor
 
     - name: Run canSettle monitoring script
       env:
@@ -36,7 +38,7 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
           DAVE_CONTRACT_ADDRESS: "0x76015b34F5b0BB4A2643895d8Eac383B90724974"
       run: |
-        node src/canSettleMonitor.js
+        pnpm run can-settle-monitor
 
     - name: Commit and push data
       run: |
