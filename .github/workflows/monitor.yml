@@ -28,7 +28,7 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
           BATCH_BLOCK: 490
       run: |
-        node monitor.js
+        node src/monitor.js
 
     - name: Run canSettle monitoring script
       env:
@@ -36,7 +36,7 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
           DAVE_CONTRACT_ADDRESS: "0x76015b34F5b0BB4A2643895d8Eac383B90724974"
       run: |
-        node canSettleMonitor.js
+        node src/canSettleMonitor.js
 
     - name: Commit and push data
       run: |

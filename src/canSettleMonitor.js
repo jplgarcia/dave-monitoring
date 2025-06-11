@@ -3,8 +3,8 @@ import { createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
 import { notifyDiscord } from './discord.js'
 
-const DATA_FILE = './data.json';
-const CAN_SETTLE_DATA_FILE = './canSettle.json';
+const DATA_FILE = './data/data.json';
+const CAN_SETTLE_DATA_FILE = './data/canSettle.json';
 const DAVE_CONTRACT_ADDRESS = process.env.DAVE_CONTRACT_ADDRESS ?? '0xa3207ab41E862a41c6a8aD9894daA9222977dF1d';
 
 const abi = [

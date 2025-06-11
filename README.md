@@ -64,8 +64,8 @@ Set the following secrets in your GitHub repository:
    - (Optional) `DAVE_CONTRACT_ADDRESS`, `BATCH_BLOCK`, `NODE_ADDRESS`, `MIN_BALANCE`
 3. Run the scripts:
    ```bash
-   node monitor.js
-   node canSettleMonitor.js
+   node src/monitor.js
+   node src/canSettleMonitor.js
    ```
 
 ## Dependencies

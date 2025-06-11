@@ -3,7 +3,7 @@ import { parseAbiItem, formatEther, createPublicClient, http } from 'viem'
 import { sepolia } from 'viem/chains'
 import { notifyDiscord } from './discord.js'
 
-const DATA_FILE = './data.json';
+const DATA_FILE = './data/data.json';
 const BATCH_BLOCK = BigInt(process.env.BATCH_BLOCK ?? 500);
 
 const client = createPublicClient({
