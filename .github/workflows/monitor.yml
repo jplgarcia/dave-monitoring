@@ -34,7 +34,7 @@ jobs:
       env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           RPC_URL: ${{ secrets.RPC_URL }}
-          DAVE_CONTRACT_ADDRESS: "0xa3207ab41E862a41c6a8aD9894daA9222977dF1d"
+          DAVE_CONTRACT_ADDRESS: "0x76015b34F5b0BB4A2643895d8Eac383B90724974"
       run: |
         node canSettleMonitor.js
 
