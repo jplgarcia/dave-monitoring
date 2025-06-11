@@ -26,7 +26,7 @@ jobs:
 
     - name: Run event monitoring script
       env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
           RPC_URL: ${{ secrets.RPC_URL }}
           BATCH_BLOCK: 490
       run: |
@@ -34,7 +34,7 @@ jobs:
 
     - name: Run canSettle monitoring script
       env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
           RPC_URL: ${{ secrets.RPC_URL }}
           DAVE_CONTRACT_ADDRESS: "0x76015b34F5b0BB4A2643895d8Eac383B90724974"
       run: |

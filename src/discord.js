@@ -1,7 +1,9 @@
 export async function notifyDiscord(message) {
     const webhookUrl = process.env.DISCORD_WEBHOOK;
     if (!webhookUrl) {
-        console.warn('No DISCORD_WEBHOOK set in environment variables.');
+        console.warn('Environment variable DISCORD_WEBHOOK is unset.');
+        console.warn('Printing message in console instead.');
+        console.log(message);
         return;
     }
 
