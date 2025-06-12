@@ -2,7 +2,7 @@
     "isFinished": false,
     "epochNumber": "4",
     "winnerCommitment": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "lastCanSettleTimestamp": 1748983950591,
+    "lastCanSettleTimestamp": null,
     "currentSealedEpoch": {
         "epochNumber": "4",
         "inputIndexLowerBound": "1",
