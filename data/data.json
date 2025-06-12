@@ -1,4 +1,56 @@
 {
-    "lastProcessedBlock": "8518088",
-    "tournaments": {}
+    "lastProcessedBlock": "8529781",
+    "tournaments": {
+        "0x649d5a41969d914af66d989b7793dd3a28d32896": {
+            "claims": {
+                "0xdaaaa411096bb081b9841a2fd9f5515bfb59f30a2a702554a5d0cfe1ea4a07af": {
+                    "tx": "0x31d2f10f3c7242b70546019598652b2ebcb0dc44678be80be6d7947742aa761a",
+                    "blockNumber": "8518186",
+                    "timestamp": "1749697584"
+                }
+            },
+            "address": "0x649d5a41969d914af66d989b7793dd3a28d32896"
+        },
+        "0xebc08f89cfb1ef476b6dd98094f38f31a20e15d1": {
+            "claims": {
+                "0xf9ae2b2c74c0cf64bf41705990287b73cea24b097d6fe0d1d6600acaf6878219": {
+                    "tx": "0xb542e91686e633e2863e8e4db2ec691bcfb6336ae280e0640ce3a8884126fa42",
+                    "blockNumber": "8520871",
+                    "timestamp": "1749697584"
+                }
+            },
+            "address": "0xebc08f89cfb1ef476b6dd98094f38f31a20e15d1"
+        },
+        "0x9295c80a0f7da823c6157e4bdd52c5e07534ead9": {
+            "claims": {
+                "0xf9ae2b2c74c0cf64bf41705990287b73cea24b097d6fe0d1d6600acaf6878219": {
+                    "tx": "0xb929191f23f688dacf6e8537deb9adb5edd3a47673c5f54e9666c3d1cde2b4a5",
+                    "blockNumber": "8523601",
+                    "timestamp": "1749697584"
+                }
+            },
+            "address": "0x9295c80a0f7da823c6157e4bdd52c5e07534ead9"
+        },
+        "0x6bb37369f7ce7729ba5112686344b2fccf00ce37": {
+            "claims": {
+                "0xf9ae2b2c74c0cf64bf41705990287b73cea24b097d6fe0d1d6600acaf6878219": {
+                    "tx": "0x30510f7e2a736711f0f733a6c322ab975f8c53845f896f6047247e9a6bf6d5ac",
+                    "blockNumber": "8526275",
+                    "timestamp": "1749697584"
+                }
+            },
+            "address": "0x6bb37369f7ce7729ba5112686344b2fccf00ce37"
+        },
+        "0xada1f76ae1b9fc7e25c5abf1d8a38895b632a11b": {
+            "claims": {
+                "0xf9ae2b2c74c0cf64bf41705990287b73cea24b097d6fe0d1d6600acaf6878219": {
+                    "tx": "0xb114e7b071fbf56abf1db04da15a7b3acf48ed363a6cb39866c545863e108e53",
+                    "blockNumber": "8528992",
+                    "timestamp": "1749697584"
+                }
+            },
+            "address": "0xada1f76ae1b9fc7e25c5abf1d8a38895b632a11b"
+        }
+    },
+    "lastTimestamp": "1749697584"
 }
