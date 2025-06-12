@@ -15,6 +15,23 @@ function bigintReplacer(_, value) {
     return typeof value === 'bigint' ? value.toString() : value;
 }
 
+function bigintMin(a, b) {
+    return a < b ? a : b;
+}
+
+function getBlockRanges(fromBlock, toBlock, maxRange) {
+    const ranges = []
+
+    let start = fromBlock
+    while (start < toBlock) {
+        const end = bigintMin(start + maxRange - BigInt(1), toBlock)
+        ranges.push({ fromBlock: start, toBlock: end })
+        start = end + BigInt(1)
+    }
+
+    return ranges
+}
+
 async function checkForEvent() {
     try {
         const raw = await readFile(DATA_FILE, 'utf-8');
@@ -22,16 +39,17 @@ async function checkForEvent() {
         const lastProcessedBlock = BigInt(data.lastProcessedBlock)
         const currentBlock = await client.getBlockNumber()
         console.log(`lastProcessedBlock = ${lastProcessedBlock}; currentBlock = ${currentBlock}`)
-        let toBlock = currentBlock
-        if (toBlock > lastProcessedBlock + BATCH_BLOCK) {
-            toBlock = lastProcessedBlock + BATCH_BLOCK
-            console.log(`Avoid block limit: toBlock = ${toBlock}; currentBlock = ${currentBlock}`)
-        }
-        const logs = await client.getLogs({
-            event: parseAbiItem('event commitmentJoined(bytes32 root)'),
-            fromBlock: lastProcessedBlock,
-            toBlock,
-        })
+        let blockRanges = getBlockRanges(lastProcessedBlock, currentBlock, BATCH_BLOCK);
+        const arrayOfLogs = await Promise.all(
+          blockRanges.map(({ fromBlock, toBlock }) =>
+            client.getLogs({
+              event: parseAbiItem('event commitmentJoined(bytes32 root)'),
+              fromBlock,
+              toBlock,
+            })
+          )
+        )
+        const logs = arrayOfLogs.flat();
 
         let lastTimestamp = BigInt(data.lastTimestamp || 0)
 
@@ -80,7 +98,7 @@ async function checkForEvent() {
             console.log('No new events found.')
         }
         data.lastTimestamp = lastTimestamp.toString()
-        data.lastProcessedBlock = toBlock.toString()
+        data.lastProcessedBlock = currentBlock.toString()
         await writeFile(DATA_FILE, JSON.stringify(data, null, 4))
     } catch (error) {
         console.error('Error querying blockchain:', error)
