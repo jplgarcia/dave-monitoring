@@ -20,12 +20,12 @@ async function checkForEvent() {
         const raw = await readFile(DATA_FILE, 'utf-8');
         const data = JSON.parse(raw);
         const lastProcessedBlock = BigInt(data.lastProcessedBlock)
-        const currentBLock = await client.getBlockNumber()
-        console.log(`lastProcessedBlock = ${lastProcessedBlock}; currentBLock = ${currentBLock}`)
-        let toBlock = currentBLock
+        const currentBlock = await client.getBlockNumber()
+        console.log(`lastProcessedBlock = ${lastProcessedBlock}; currentBlock = ${currentBlock}`)
+        let toBlock = currentBlock
         if (toBlock > lastProcessedBlock + BATCH_BLOCK) {
             toBlock = lastProcessedBlock + BATCH_BLOCK
-            console.log(`Avoid block limit: toBlock = ${toBlock}; currentBLock = ${currentBLock}`)
+            console.log(`Avoid block limit: toBlock = ${toBlock}; currentBlock = ${currentBlock}`)
         }
         const logs = await client.getLogs({
             event: parseAbiItem('event commitmentJoined(bytes32 root)'),
