@@ -27,6 +27,8 @@ jobs:
       env:
           DISCORD_WEBHOOK: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
           RPC_URL: ${{ secrets.RPC_URL }}
+          NODE_ADDRESS: ${{ vars.NODE_ADDRESS }}
+          MIN_BALANCE: ${{ vars.MIN_BALANCE }}
           BATCH_BLOCK: 490
       run: |
         pnpm run monitor
@@ -35,7 +37,7 @@ jobs:
       env:
           DISCORD_WEBHOOK: ${{ github.ref == 'refs/heads/main' && secrets.DISCORD_WEBHOOK || '' }}
           RPC_URL: ${{ secrets.RPC_URL }}
-          DAVE_CONTRACT_ADDRESS: "0x76015b34F5b0BB4A2643895d8Eac383B90724974"
+          DAVE_CONTRACT_ADDRESS: ${{ vars.DAVE_CONSENSUS_ADDRESS }}
       run: |
         pnpm run can-settle-monitor
 
