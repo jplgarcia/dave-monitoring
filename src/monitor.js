@@ -109,7 +109,7 @@ async function checkForEvent() {
 checkForEvent()
 
 // check balance
-const NODE_ADDRESS = process.env.NODE_ADDRESS ?? '0x79Ec6ba3352216E496FCfEd1d2e86Ee15eed3861'
+const NODE_ADDRESS = process.env.NODE_ADDRESS ?? '0xB3aB9C1cCcb17115d1c9955cE3f7B1F4614486C6'
 const MIN_BALANCE = BigInt(process.env.MIN_BALANCE ?? '100000000000000000') // 0.1 ETH
 
 async function checkBalance() {
