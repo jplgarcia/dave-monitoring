@@ -5,7 +5,7 @@ import { notifyDiscord } from './discord.js'
 
 const DATA_FILE = './data/data.json';
 const CAN_SETTLE_DATA_FILE = './data/canSettle.json';
-const DAVE_CONTRACT_ADDRESS = process.env.DAVE_CONTRACT_ADDRESS ?? '0xa3207ab41E862a41c6a8aD9894daA9222977dF1d';
+const DAVE_CONTRACT_ADDRESS = process.env.DAVE_CONTRACT_ADDRESS ?? '0x6ce590b9f0697327f18c601df6f0bae4a0801b68';
 
 const abi = [
     {
